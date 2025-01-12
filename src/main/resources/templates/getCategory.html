@@ -1,0 +1,80 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title>Category Tree</title>
+    <style>
+        ul {
+            list-style-type: none;
+        }
+        li {
+            margin: 5px 0;
+        }
+        button {
+            margin-left: 10px;
+        }
+    </style>
+</head>
+<body>
+    <h1>Category Tree</h1>
+    <ul>
+        <li th:each="entry : ${categoryTree}">
+            <span th:text="${entry.key.categoryName}"></span>
+            <!-- Add button with categoryId -->
+            <button type="button" 
+                    th:value="${entry.key.categoryId}" 
+                    th:onclick="'addCategory(' + ${entry.key.categoryId} + ')'">
+                Delete
+            </button>
+            <ul>
+                <li th:each="child : ${entry.value}">
+                    <span th:text="${child.categoryName}"></span>
+                    <!-- Add button for child category -->
+                    <button type="button" 
+                            th:value="${child.categoryId}" 
+                            th:onclick="addCategory(${child.categoryId})">
+                        Delete
+                    </button>
+                    <ul th:if="${child.children}">
+                        <li th:each="subChild : ${child.children}">
+                            <span th:text="${subChild.categoryName}"></span>
+                            <!-- Add button for subChild category -->
+                            <button type="button" 
+                                    th:value="${subChild.categoryId}" 
+                                    th:onclick="addCategory(${subChild.categoryId})">
+                                Delete
+                            </button>
+                        </li>
+                    </ul>
+                </li>
+            </ul>
+        </li>
+    </ul>
+
+    <script>
+		function deleteCategory(categoryId) {
+		    console.log("Deleting category under Category ID:", categoryId);
+			
+
+		    // Use fetch to send a POST request
+			fetch('/amazon/category/deleteAndUpdateCategory?categoryId=' + categoryId, {
+			    method: 'POST',
+			    headers: {
+			        'Content-Type': 'application/x-www-form-urlencoded' // This is fine for URL query params
+			    }
+			})
+			.then(response => {
+			    if (response.ok) {
+			        console.log('Category Deleted and updated successfully');
+			        // Optionally redirect or update the page after successful response
+			        window.location.href = '/category/getCategory'; // Redirect to the category list page
+			    } else {
+			        console.error('Failed to update category');
+			    }
+			})
+			.catch(error => {
+			    console.error('Error occurred:', error);
+			});
+		}
+</script>
+</body>
+</html>

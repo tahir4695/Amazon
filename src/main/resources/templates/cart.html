@@ -1,0 +1,136 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title>Your Shopping Cart</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+            background-color: #f8f9fa;
+        }
+
+        .container {
+            max-width: 900px;
+            margin: 20px auto;
+            background: #fff;
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+        }
+
+        h1 {
+            text-align: center;
+            color: #333;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 20px 0;
+        }
+
+        table th, table td {
+            border: 1px solid #ddd;
+            padding: 12px;
+            text-align: left;
+        }
+
+        table th {
+            background-color: #007bff;
+            color: white;
+        }
+
+        table td img {
+            width: 60px;
+            height: 60px;
+            object-fit: cover;
+            border-radius: 8px;
+        }
+
+        .actions button {
+            margin-right: 5px;
+            padding: 5px 10px;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+        }
+
+        .btn-update {
+            background-color: #28a745;
+            color: white;
+        }
+
+        .btn-remove {
+            background-color: #dc3545;
+            color: white;
+        }
+
+        .empty-cart {
+            text-align: center;
+            color: #888;
+        }
+
+        .continue-shopping {
+            display: flex;
+            justify-content: center;
+            margin-top: 20px;
+        }
+
+        .continue-shopping a {
+            text-decoration: none;
+            color: white;
+            background-color: #007bff;
+            padding: 10px 20px;
+            border-radius: 4px;
+        }
+
+        .continue-shopping a:hover {
+            background-color: #0056b3;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>Your Shopping Cart</h1>
+
+        <!-- Check if cart has items -->
+        <div th:if="${carts.size() > 0}">
+            <table>
+                <thead>
+                    <tr>
+                        <th>Product</th>
+                        <th>Name</th>
+                        <th>Description</th>
+                        <th>Quantity</th>
+                        <th>Actions</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <!-- Iterate through cartProductDTO -->
+                    <tr th:each="cart : ${carts}">
+                        <td><img th:src="@{/{imageUrl}(imageUrl=${cart.imageUrl})}" alt="Product Image"></td>
+                        <td th:text="${cart.productName}"></td>
+                        <td th:text="${cart.description}"></td>
+                        <td th:text="${cart.quantity}"></td>
+                        <td class="actions">
+                            <button class="btn-update" th:data-id="${cart.cartId}">Update</button>
+                            <button class="btn-remove" th:data-id="${cart.cartId}">Remove</button>
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+
+        <!-- Show if cart is empty -->
+        <div class="empty-cart" th:if="${carts.size() == 0}">
+            <p>Your cart is empty. Add some products to your cart!</p>
+        </div>
+
+        <!-- Continue shopping button -->
+        <div class="continue-shopping">
+            <a href="/amazon/product">Continue Shopping</a>
+        </div>
+    </div>
+</body>
+</html>

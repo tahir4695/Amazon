@@ -1,0 +1,28 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Add Category</title>
+</head>
+<body>
+    <h1>Add Category</h1>
+    <form action="/amazon/category/saveCategory" method="post">
+        <label for="categoryName">Category Name:</label>
+        <input type="text" id="categoryName" name="categoryName" required>
+        <br><br>
+
+        <label for="parentCategory">Parent Category:</label>
+        <select id="parentCategory" name="parentCategory.categoryId">
+            <option value="">None</option> <!-- Option for no parent category -->
+			<!-- Dynamically populate categories -->
+		    <th:block th:each="category : ${Parentcategories}">
+		        <option th:value="${category.categoryId}" th:text="${category.categoryName}"></option>
+		    </th:block>
+        </select>
+        <br><br>
+
+        <button type="submit">Add Category</button>
+    </form>
+</body>
+</html>

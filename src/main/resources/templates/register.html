@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Register</title>
+    <link rel="stylesheet" href="/css/styles.css"> <!-- Optional: Add a stylesheet -->
+</head>
+<body>
+    <h1>Register</h1>
+    <form id="registerForm" action="/auth/register" method="post">
+		<div>
+            <label for="name">Name:</label>
+            <input type="text" id="name" name="name" required>
+        </div>
+        <div>
+            <label for="loginId">Username:</label>
+            <input type="text" id="loginId" name="loginId" required>
+        </div>
+        <div>
+            <label for="email">Email:</label>
+            <input type="email" id="email" name="email" required>
+        </div>
+		<div>
+            <label for="phoneNumber">Phone Number:</label>
+            <input type="number" id="phoneNumber" name="phoneNumber" required>
+        </div>
+        <div>
+            <label for="password">Password:</label>
+            <input type="password" id="password" name="password" required>
+        </div>
+		<div>
+            <label for="cnfpassword">Confirm Password:</label>
+            <input type="password" id="cnfpassword" name="cnfpassword" required>
+        </div>
+        <button type="submit">Register</button>
+    </form>
+    <script>
+        document.getElementById("registerForm").onsubmit = async function (event) {
+            event.preventDefault(); // Prevent default form submission
+			if(document.getElementById("password").value !=document.getElementById("cnfpassword").value){
+				alert("Password not same");
+				return;
+			}
+            const formData = {
+				name:document.getElementById("name").value,
+                loginId: document.getElementById("loginId").value,
+                email: document.getElementById("email").value,
+				phoneNumber:document.getElementById("phoneNumber").value,
+                password: document.getElementById("password").value
+            };
+			
+            try {
+                const response = await fetch('/auth/register', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify(formData)
+                });
+
+                const result = await response.text();
+                alert(result);
+				window.location.href = "http://localhost:8080/login";
+            } catch (error) {
+                console.error("Error registering user:", error);
+                alert("Failed to register. Please try again.");
+            }
+        };
+    </script>
+</body>
+</html>

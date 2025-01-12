@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Login</title>
+</head>
+<body>
+	<form>
+	    <label>Login ID:</label>
+	    <input type="text" id="loginId" name="loginId" required><br>
+
+	    <label>Password:</label>
+	    <input type="password" id="password" name="password" required><br>
+
+	    <button type="button" id="login">Login</button>
+	</form>
+</body>
+</html>
+
+<script>
+    document.getElementById('login').addEventListener('click', function(event) {
+        event.preventDefault();
+
+        const loginId = document.getElementById('loginId').value;
+        const password = document.getElementById('password').value;
+
+        fetch('http://localhost:8080/auth/login', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
+            body: new URLSearchParams({ loginId, password })
+        })
+        .then(response => response.text())
+        .then(data => alert(data))
+        .catch(error => console.error('Error:', error));
+    });
+</script>
