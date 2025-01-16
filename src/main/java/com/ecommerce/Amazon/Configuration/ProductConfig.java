@@ -41,7 +41,7 @@ public class ProductConfig {
 				    new BigDecimal("999.99"),
 				    5,
 				    1L,  // categoryId
-				    "images/iPhone_16.jpg"  // relative image path
+				    "iPhone_16.jpg"  // relative image path
 				);
 			Product HpPavilion = new Product(
 				    "HpPavilion",
@@ -49,7 +49,7 @@ public class ProductConfig {
 				    new BigDecimal("10000.99"),
 				    4,
 				    2L,  // categoryId
-				    "images/iPhone_16.jpg"  // relative image path
+				    "iPhone_16.jpg"  // relative image path
 				);
 			repository.saveAll(List.of(iPhone,HpPavilion));
 		};

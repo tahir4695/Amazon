@@ -8,6 +8,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -44,11 +45,28 @@ public class CartController {
 	public ResponseEntity<String> addProductToCart(@RequestParam Long productId, @RequestParam int quantity,HttpSession session) {
 	    try {
 	    	User user=(User)session.getAttribute("user");
-	        cartService.addProductToCart(productId, quantity,user);
-	        return ResponseEntity.ok("Product added to cart successfully.");
+	        int result=cartService.addProductToCart(productId, quantity,user);
+	        if(result!=0) {
+	        	return ResponseEntity.ok("Product added to cart successfully.");
+	        }
+	        else {
+	        	return ResponseEntity.ok("Product Not added to cart successfully.");
+	        }
+	        
 	    } catch (Exception e) {
 	        return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
 	                             .body("Failed to add product to cart: " + e.getMessage());
+	    }
+	}
+	@DeleteMapping("/removeProduct")
+	public ResponseEntity<String> removeProduct(@RequestParam Long CartId){
+		
+		try {
+			String message=cartService.deleteCart(CartId);
+	        return ResponseEntity.ok(message);
+	    } catch (Exception e) {
+	        return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
+	                             .body("Failed to delete product from cart: " + e.getMessage());
 	    }
 	}
 }

@@ -109,7 +109,7 @@
                 <tbody>
                     <!-- Iterate through cartProductDTO -->
                     <tr th:each="cart : ${carts}">
-                        <td><img th:src="@{/{imageUrl}(imageUrl=${cart.imageUrl})}" alt="Product Image"></td>
+                        <td><img th:src="@{/images/{imageUrl}(imageUrl=${cart.imageUrl})}" alt="Product Image"></td>
                         <td th:text="${cart.productName}"></td>
                         <td th:text="${cart.description}"></td>
                         <td th:text="${cart.quantity}"></td>
@@ -133,4 +133,34 @@
         </div>
     </div>
 </body>
+<script>
+	document.addEventListener("DOMContentLoaded", function(){
+		document.querySelectorAll(".btn-remove").forEach(function(button){
+			button.addEventListener("click",function(){
+				var cartId=this.getAttribute("data-id");
+				remove(cartId);
+			});
+		});
+	});
+	
+	function remove(cartId){
+		fetch('/amazon/cart/removeProduct?CartId=' + cartId, {
+		            method: 'DELETE',
+		            headers: {
+		                'Content-Type': 'application/x-www-form-urlencoded' // This is fine for URL query params
+		            }
+		        })
+				.then(response => {
+			            if (response.ok) {
+			                alert(response.text());
+			                window.location.href = '/amazon/cart'; // Redirect to the cart page
+			            } else {
+			                console.error('Failed to add product to cart');
+			            }
+			        })
+					.catch(error => {
+					            console.error('Error occurred:', error);
+					        });
+	}
+</script>
 </html>

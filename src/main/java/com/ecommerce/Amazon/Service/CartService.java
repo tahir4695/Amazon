@@ -39,11 +39,15 @@ public class CartService {
 			return null;
 		}
 	}
-	public void addProductToCart(Long productId, int quantity,User user) {
+	public int addProductToCart(Long productId, int quantity,User user) {
 		try {
 			Cart cart=new Cart();
 			cart=cartRepository.findCartByUserIdandProductId(user.getId(),productId);
 			if(cart!=null) {
+				Product product=productService.findByProductId(cart.getProduct().getProductId());
+				if(product.getStock()<cart.getQuantity()+quantity) {
+					return 0;
+				}
 				cartRepository.updateByuserIdproductId(user.getId(),productId,cart.getQuantity()+quantity);
 			}
 			Product product=productService.findByProductId(productId);
@@ -53,19 +57,24 @@ public class CartService {
 				cart.setProduct(product);
 				cart.setUser(user);
 				cart.setQuantity(quantity);
-				cartRepository.save(cart);
+				return cartRepository.save(cart)!=null?1:0;
 			}
+			return 0;
 		}
 		catch(Exception ex) {
 			System.out.print(ex.getMessage());
-			return;
+			return 0;
 		}
 	}
 	
-	public String updateByCartId(Long cartId,int quantity) {
+	public int updateByCartId(Long cartId,int quantity) {
 		try {
 			int updatedrow=0;
 			Cart cart=cartRepository.findCartByCartId(cartId);
+			Product product=productService.findByProductId(cart.getProduct().getProductId());
+			if(product.getStock()<cart.getQuantity()+quantity) {
+				return 0;
+			}
 			if(cart.getQuantity()>quantity) {
 				int remaing=cart.getQuantity()-quantity;
 				updatedrow=cartRepository.updateByCartId(cartId,remaing);
@@ -73,16 +82,11 @@ public class CartService {
 			else if(cart.getQuantity()<=quantity) {
 				updatedrow = cartRepository.deleteByCartId(cartId);
 			}
-			if(updatedrow>0) {
-				return "Updated";
-			}
-			else {
-				return "Not Updated";
-			}
+			return updatedrow;
 		}
 		catch(Exception ex) {
 			System.out.print(ex.getMessage());
-			return "Not Updated";
+			return 0;
 		}
 		
 	}

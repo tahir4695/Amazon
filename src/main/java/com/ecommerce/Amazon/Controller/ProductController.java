@@ -131,6 +131,13 @@ public class ProductController {
 
         // If a new image is uploaded, save it
         if (image != null && !image.isEmpty()) {
+        	// Delete the existing image
+            String existingImagePath = "src/main/resources/static/images/" + product.getImageUrl();
+            Path existingImagePathObj = Paths.get(existingImagePath);
+            if (Files.exists(existingImagePathObj)) {
+                Files.delete(existingImagePathObj);
+            }
+            
             String imageUrl = saveImage(image);
             product.setImageUrl(imageUrl);
         }
