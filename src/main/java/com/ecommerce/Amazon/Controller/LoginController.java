@@ -40,7 +40,7 @@ public class LoginController {
     
     @GetMapping
     public String dashboard() {
-    	/*User user=new User("Tahir","tahir","Standard","tahir4112001@gmail.com","9960523876","tahir");
+    	/*User user=new User("uuuu","uuu","Standard","uuuuu@gmail.com","00000000","uuuu");
     	userRepository.save(user);
     	Category Electronics=new Category("Electronics",null);
 		
